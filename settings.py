@@ -164,6 +164,8 @@ LOGGING = {
 AUTH_PROFILE_MODULE = 'app.UserProfile'
 COMMENTS_APP = 'custom_threadedcomments'
 
+LOGOUT_REDIRECT_URL = '/' # socialauth
+
 from localsettings import *
 from socialauth_settings import *
 
