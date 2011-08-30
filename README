@@ -1,0 +1,4 @@
+to set up this project, create a virtual env and install everything in requirements.txt by being in e.g. /srv/envs and using: pip install -E bjjenv -r /srv/www/bjj/requirements.txt
+
+Also install Django-SocialAuth which is in the home directory: python /home/Django-SocialAuth/setup.py install
+ 

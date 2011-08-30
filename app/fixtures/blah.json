@@ -1,0 +1,58 @@
+[
+    {
+        "model": "app.category",
+        "pk":0,
+        "fields": {
+            "name": "Funny", "url_name": "Funny"
+        }
+    },
+    {
+        "model": "app.category",
+        "pk":1,
+        "fields": {
+            "name": "Gi Matches", "url_name": "Gi-Matches"
+        }
+    },
+    {
+        "model": "app.category",
+        "pk":2,
+        "fields": {
+            "name": "Highlights", "url_name": "Highlights"
+        }
+    },
+    {
+        "model": "app.category",
+        "pk":3,
+        "fields": {
+            "name": "Instructionals", "url_name": "Instructionals"
+        }
+    },
+    {
+        "model": "app.category",
+        "pk":4,
+        "fields": {
+            "name": "No Gi Matches", "url_name": "No-Gi-Matches"
+        }
+    },
+    {
+        "model": "app.category",
+        "pk":5,
+        "fields": {
+            "name": "Pro Fights", "url_name": "Pro-Fights"
+        }
+    },  
+    {
+        "model": "app.category",
+        "pk":6,
+        "fields": {
+            "name": "Questions", "url_name": "Questions"
+        }
+    },   
+    {
+        "model": "app.category",
+        "pk":7,
+        "fields": {
+            "name": "Wrestling", "url_name": "Wrestling"
+        }
+    }   
+]

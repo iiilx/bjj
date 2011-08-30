@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding-left:10px"class="min">
+<form action="" method="post"> {% csrf_token %}
+    
+{{ poll_form.as_p }}
+
+{{ choice_formset.management_form }}
+{% for form in choice_formset.forms %}
+{{ form.as_p }}
+{% endfor %}
+
+<p><input type="submit" value="Submit"></p>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ poll.question }} | {{ block.super }}
+{% endblock %}
+
+{% block extrahead %}
+{% include "poll/upvote_js.html" %}
+{% endblock %}
+
+{% block content %}
+<table class="center">
+<thead><th></th><th>choice</th><th>votes</th></thead>
+<tbody>
+{% for choice in choices %}
+<tr><td><div id="triangle-up" onclick="UpvoteChoice({{choice.pk}})"></div></td><td>{{ choice.choice }}</td> <td id="c_{{choice.pk}}">{{ choice.votes }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+
+<div class="comments">
+{% with poll as object %}
+    {% include "partial/comment.html" %}
+{% endwith %}
+</div>
+
+{% endblock %}

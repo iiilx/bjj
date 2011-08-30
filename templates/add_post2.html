@@ -1,0 +1,26 @@
+{% extends "base2.html" %}
+
+{% load uni_form_tags %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
+<script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+<script>
+$(".nav li").hover( function() {$(this).find("ul").show()}, function() {$(this).find("ul").hide()});
+</script>
+{% endblock %}
+
+{% block title %}
+{{title}} | {{ block.super }}
+{% endblock %}
+{% block content %}
+<form class="uniForm" action="{% url add_post %}" method="post"> {% csrf_token %}
+{{ form1|as_uni_form }}
+<p><input type="submit" class="myButton" value="Submit"></p>
+
+<form class="uniForm" action="{% url add_post %}" method="post"> {% csrf_token %}
+{{ form2|as_uni_form }}
+<p><input type="submit" class="myButton" value="Submit"></p>
+</form>
+{% endblock %}

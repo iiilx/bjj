@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{profile.handle}}'s profile | {{ block.super }}
+{% endblock %}
+{% block content %}
+<p><b>Belt:</b> {{ profile.belt }}</p>
+<p><b>Bio:</b> {% firstof profile.bio "None"%}</p>
+{% endblock %}

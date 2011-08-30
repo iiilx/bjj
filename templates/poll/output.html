@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <title>Bjj Links Poll Widget</title>
+<style>
+* {font-size:12px}
+p {margin:2px;}
+.sm{font-size:10px;}
+a{color:#ececec;text-decoration:none}
+body{background:#999;}
+#triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid red;
+   cursor: pointer;
+}
+.center{text-align:center}
+</style>    
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> 
+{% include "poll/upvote_js.html" %}
+</head>
+<body>
+<p><a href="{% url get_poll_single poll.pk %}{{poll.question|slugify}}" target="blank">{{poll.question}}</a></p>
+<table>
+<thead><th></th><th>choice</th><th>votes</th></thead>
+<tbody>
+{% for choice in choices %}
+<tr><td><div id="triangle-up" onclick="return UpvoteChoice({{choice.pk}})"></div></td><td>{{choice.choice}}</td><td id="c_{{choice.pk}}">{{ choice.votes }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+<p class="center sm">Poll by <a href="http://bjjlinks.com">Bjj links</a></p>
+</body>
+</html>

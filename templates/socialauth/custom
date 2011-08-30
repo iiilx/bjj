@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="gen-content-l">
+{% if user.is_authenticated %}
+  <p>You are already logged in. <a href="{% url socialauth_social_logout %}">Logout</a>?</p>
+{% else %}
+  <p>Please login using Facebook, Gmail, LinkedIn or Twitter.</p>
+{% endif %}
+</div>
+{% endblock %}

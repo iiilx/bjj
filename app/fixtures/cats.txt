@@ -1,0 +1,31 @@
+audio
+collaboration
+facebook
+fail
+finance/economics
+frontend/ui/ux
+funny
+google
+govt & legislation
+hackers!
+investment news
+job listings
+junk
+lawsuits & IP
+lessons learned & advice
+lifestyle
+looking 4 work
+m&a
+math
+mobile
+nosql
+other
+questions
+rdb/sql
+science
+security/crypto
+source control
+startup feedback
+startup report
+sys admin
+unix/linux

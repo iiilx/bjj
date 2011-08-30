@@ -1,0 +1,5 @@
+socialauth_settings.py
+localsettings.py
+*.pyc
+pickled.txt
+*.log

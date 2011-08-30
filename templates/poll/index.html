@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} | {{block.super}} {% endblock %}
+{% block content %}
+{% for poll in polls %}
+    <p><a href="{% url get_poll_single poll.pk %}{{ poll.question|slugify }}">{{poll.question}}</a></p>
+{% endfor %}
+{% endblock %}

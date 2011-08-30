@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{title}} | {{block.super}}
+{% endblock %}
+{% block extrahead %}
+<script>
+var is_admin = {% if is_admin %}1{% else %}0{% endif %};
+var page_num = {{page}};
+</script>
+{% endblock %}
+
+{% block content %}
+{% if list_of_tups %}
+
+{% include "generic_table.html" %}
+<hr />
+<div id="pagination" class="bottom">
+{% include "pagination.html" %}
+</div>
+<!-- end pagination --> 
+{% else %}
+<div id="no-content" class="min">No content.</div>
+{% endif  %}
+{% endblock %}
+

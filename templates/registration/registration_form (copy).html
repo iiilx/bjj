@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+{% endblock %}
+
+{% block content %}
+<center><h2>Make a guild site now</h2></center>
+<div id="form">
+<form action="/accounts/register/" method="post">{% csrf_token %}
+{{ form.non_field_errors }}
+
+{% for field in form %}
+    <div> 
+    {{ field.label_tag }} {% if forloop.last %} <span style="color:#FFF;">http:// {{ field }}.{{request.domain}} </span>{% else %} {{ field }} {% endif %}{{field.errors}} 
+    </div>
+    </br>
+{% endfor %}
+
+<div><label>&nbsp;</label><input type="submit" value="Submit" /></div>
+</form>
+</div>
+
+{% endblock %}
+

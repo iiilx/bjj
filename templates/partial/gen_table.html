@@ -1,0 +1,17 @@
+<table style="max-width:700px;" border="0">
+    <thead>
+        <tr><th></th><th></th><th>post</th><th>hn</th><th>respect</th></tr>
+    </thead>
+    <tbody>
+    {% for post in posts.object_list %}
+<tr>
+    <td>{{forloop.counter}}</td>
+    <td><a href="" onclick="return upvotePost({{post.id}})"><img src="{{MEDIA_URL}}icons/arrow.png" /></a></td>
+    <td><a href="{{post.post_url}}" target="blank">{{post.title}}</a></td>
+    <td><a href="{{post.comments_url}}">hn</a></td>
+    <td id="{{post.id}}">{{post.upvotes}}</td>
+</tr>
+    {% endfor %}
+
+    </tbody>
+</table>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="gen-content-l">
+
+{% if uncat_post %}
+<h3>~ {{num_uncat}} uncategorized</h3>
+
+<a href="{{uncat_post.post_url}}" class="yellow">{{uncat_post.title}}</a>
+<form id="uncat_form"  action="{% url categorize %}" method="post"> {% csrf_token %}
+<input type="hidden" value="{{uncat_post.id}}" name="post_id">
+<p><label for="id_category">Primary Category:</label>
+<select name="category" id="id_category">
+</select>
+</p>
+<input type="submit" value="Categorize!" /> 
+</p>
+</form>
+{% else %}
+No content
+{% endif %}
+</div>
+{% endblock %}

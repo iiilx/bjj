@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{post.title}} | {% firstof cat.seo_name cat.name %} | {{ block.super }} 
+{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
+<script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+<script>
+var page_num = 0;
+var post_url = "{{post.post_url|safe}}";
+
+</script>
+{% endblock %}
+
+{% block page_title %}
+<div id="post_title">
+<table>
+    <tbody id="posts">
+    <tr>
+        <td><div id="v{{post.id}}" class="thumb" onclick="return upvotePost({{post.id}})"></div></td>
+        <td><h2><span id="{{post.id}}" class="gr">+{{post.upvotes}}</span></h2></td>
+        <td><h2>{{title}}</h2></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if not post.is_youtube %} <a href="{{ post.post_url }}" target="blank">{{ post.post_url }}</a>{% endif %}
+{% if post.text %}<br /><p>{{post.text}}</p>{% endif %}
+<br />
+
+<div class="comments">
+{% with post as object %}
+    {% include "partial/comment.html" %}
+{% endwith %}
+</div>
+
+{% endblock %}

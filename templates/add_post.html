@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load uni_form_tags %}
+
+{% block title %}
+{{title}} | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<form class="uniForm" action="{% url add_post %}" method="post"> {% csrf_token %}
+{{ form|as_uni_form }}
+<p>Your post will appear within 1 minute of submitting this form</p>
+<p><input type="submit" class="myButton" value="Submit"></p>
+</form>
+{% endblock %}

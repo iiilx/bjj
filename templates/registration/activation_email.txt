@@ -1,0 +1,2 @@
+This is an activation email for {{site.domain}}. Follow this link to activate your account: http://www.{{site.domain}}/accts/activate/{{activation_key}}/.
+You have {{ expiration_days }} days to activate your account. 
