@@ -1,6 +1,10 @@
 import sys
-sys.path.append('/srv/www/bjj_project/staging')
-sys.path.append('/srv/www/bjj_project/staging/bjj')
+import os
+
+PROJECT_DIR = os.path.abspath(os.path.join(__file__, '../..'))
+STAGING_DIR = os.path.abspath(os.path.join(__file__, '../../..'))
+sys.path.append(PROJECT_DIR)
+sys.path.append(STAGING_DIR)
 
 from django.core.management import setup_environ
 from bjj import settings
