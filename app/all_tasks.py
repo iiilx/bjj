@@ -1,6 +1,6 @@
 import sys
-sys.path.append('/srv/www')
-sys.path.append('/srv/www/bjj')
+sys.path.append('/srv/www/bjj_project/staging')
+sys.path.append('/srv/www/bjj_project/staging/bjj')
 
 from django.core.management import setup_environ
 from bjj import settings
@@ -14,9 +14,9 @@ import cPickle
 
 from datetime import datetime, timedelta 
 from math import ceil
-from bjj.app.messaging import process_upvotes
-from bjj.app.models import Post, Category
-from bjj.custom_threadedcomments.models import CustomThreadedComment
+from app.messaging import process_upvotes
+from app.models import Post, Category
+from custom_threadedcomments.models import CustomThreadedComment
 from poll.models import Poll
 
 logger = logging.getLogger()

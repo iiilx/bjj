@@ -1,4 +1,6 @@
 socialauth_settings.py
+whitelist.py
+*.sql
 localsettings.py
 *.pyc
 pickled.txt

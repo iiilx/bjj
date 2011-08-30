@@ -21,9 +21,11 @@ from django.utils.http import urlquote
 
 from bjj import settings
 from bjj.app.forms import *
-from bjj.app.models import *
+from app.models import *
 from bjj.app.messaging import send_increment_upvotes
 from bjj.app.processors import top_polls_processor
+import socialauth_settings
+
 cache = memcache.Client(['127.0.0.1:11211'])
 
 PREFIX = settings.PREFIX
@@ -115,14 +117,15 @@ def home(request):
     try:
         last_p = int(last_p)
     except:
-        return HttpResponse('issues')
-    if page > last_p:
-        page = 1
-    serialized = cache.get('%s-top-%s' % (PREFIX, page)) 
-    if not serialized: #XXX fail safe here?
-        return HttpResponse('Something is wrong.')
-    py = cPickle.loads(serialized)
-    prev_p, next_p = paginate_(page, last_p)
+        py, prev_p , next_p = None, None, None 
+    else:
+        if page > last_p:
+            page = 1
+        serialized = cache.get('%s-top-%s' % (PREFIX, page)) 
+        if not serialized: #XXX fail safe here?
+            return HttpResponse('Something is wrong.')
+        py = cPickle.loads(serialized)
+        prev_p, next_p = paginate_(page, last_p)
     handle_form = None
     if request.user.is_authenticated():
         try:
@@ -137,7 +140,6 @@ def home(request):
     return direct_to_template(request, 'generic_posts.html', {
                 'is_admin':is_admin,'page':page, 'prev_p':prev_p, 
                 'next_p':next_p, 'title':'Top',  
-                #'FB_REDIRECT_URL':FB_REDIRECT_URL, 
                 'next':settings.LOGIN_REDIRECT_URL, 
                 'handle_form':handle_form, 'list_of_tups':py})
 def home2(request):
@@ -178,7 +180,7 @@ def latest(request):
     else:
         serialized = cache.get('%s-latest-%s' % (PREFIX, page))
     prev_p, next_p = paginate_(page, last_p)
-    py = cPickle.loads(serialized)
+    py = cPickle.loads(serialized) if serialized else None
     return direct_to_template(request, 'generic_posts.html',{
                 'page':page, 'prev_p':prev_p, 'next_p':next_p, 
                 'num_uncat':get_uncat_count(), 'list_of_tups':py,
@@ -348,24 +350,9 @@ def category(request, cat_id):
     else:
         serialized = cache.get('%s-cat-%s-%s' % (PREFIX, cat.id, page))
     prev_p, next_p = paginate_(page, last_p)
-    py = cPickle.loads(serialized)
+    py = cPickle.loads(serialized) if serialized else None
     title = cat.name
     if cat.seo_name:
         title=cat.seo_name
     return direct_to_template(request, 'generic_posts.html', {'title': title, 'page':page,'prev_p':prev_p, 'next_p':next_p, 'list_of_tups':py})
-
-@admin_check
-def category2(request, cat_name):
-    try:
-        cat = Category.objects.get(url_name = cat_name)
-    except:
-        raise Http404
-    page = get_page(request)
-    last_p = cache.get('%s-cat-ct-%s' % (PREFIX, cat.id))
-    if not last_p or page > last_p:
-        json = 0 
-    else:
-        json = cache.get('%s-cat-%s-%s' % (PREFIX, cat.id, page))
-    prev_p, next_p = paginate_(page, last_p)
-    return {'TEMPLATE':'generic_posts.html','page':page,'prev_p':prev_p, 'next_p':next_p, 'json_posts':json}
 

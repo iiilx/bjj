@@ -24,7 +24,7 @@
         "model": "app.category",
         "pk":3,
         "fields": {
-            "name": "Instructionals", "url_name": "Instructionals"
+            "name": "Techniques", "url_name": "Techniques"
         }
     },
     {

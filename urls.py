@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^search/', include('haystack.urls')),
-    url(r'^sentry/', include('sentry.web.urls')),
+    #url(r'^sentry/', include('sentry.web.urls')),
 )
 
 

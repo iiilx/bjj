@@ -1,6 +1,7 @@
 from django.forms import ModelForm
-from django.forms.formsets import BaseFormSet, formset_factory
+from django.forms.formsets import BaseFormSet, formset_factory 
 from bjj.poll.models import *
+from django.forms.models import inlineformset_factory
 
 class RequiredFormSet(BaseFormSet):
     def __init__(self, *args, **kwargs):
@@ -17,5 +18,7 @@ class PollForm(ModelForm):
     class Meta:
         model = Poll
         fields = ('question',)
-ChoiceFormSet = formset_factory(ChoiceForm, extra=5, max_num=5, formset=RequiredFormSet)
+
+#ChoiceFormSet = inlineformset_factory(Poll, Choice, extra=5)
+ChoiceFormSet = formset_factory(ChoiceForm, extra=5, max_num=5, formset=BaseFormSet)
 

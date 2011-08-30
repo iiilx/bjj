@@ -1,18 +1,5 @@
-### CUSTOM CACHE SETTINGS ##
-PREFIX = 'bjj'
-## END DOMAIN SETTINGS ##
+# Django settings for bjj project.
 
-### BEGIN CELERY ###
-#import djcelery
-#djcelery.setup_loader()
-#from datetime import timedelta
-
-#CELERYBEAT_SCHEDULE = {
-#    "upvotes": {
-#        "task": "hn.all_tasks.update_all",
-#        "schedule": timedelta(seconds=60),
-#    },
-#}
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -20,28 +7,20 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-CACHES = {
-    'default' : dict(
-        BACKEND = 'johnny.backends.memcached.MemcachedCache',
-        LOCATION = ['127.0.0.1:11211'],
-        JOHNNY_CACHE = True,
-    )
-}
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'America/Chicago'
 
-### BEGIN JOHNNYCACHE ###
-JOHNNY_MIDDLEWARE_KEY_PREFIX='bjj'
-JOHNNY_TABLE_BLACKLIST = (
-    'bjj_post',
-)
-### END JOHHNCACHE ###
-
-AUTH_PROFILE_MODULE = 'app.UserProfile'
-
-TIME_ZONE = 'America/New_York'
-
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 1 
+SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -51,13 +30,9 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-import os
-
-PROJECT_DIR = os.getcwd()
-
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
+MEDIA_ROOT = ''
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -72,12 +47,12 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -94,25 +69,15 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'udehdj7ga2g9cz=o#^cs9ky0$60+c%+9ml+pe=ft2-67%1qbqx'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
-
-MIDDLEWARE_CLASSES = [
-    'johnny.middleware.LocalStoreClearMiddleware',
-    'johnny.middleware.QueryCacheMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'openid_consumer.middleware.OpenIDMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'sentry.client.middleware.Sentry404CatchMiddleware',
-]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "socialauth.context_processors.facebook_api_key",
@@ -125,111 +90,80 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
 )
 
-ROOT_URLCONF = 'bjj2.urls'
+MIDDLEWARE_CLASSES = [
+    'johnny.middleware.LocalStoreClearMiddleware',
+    'johnny.middleware.QueryCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'openid_consumer.middleware.OpenIDMiddleware',
+    'sentry.client.middleware.Sentry404CatchMiddleware',
+]
+
+ROOT_URLCONF = 'bjj.urls'
+
+import os
+
+PROJECT_DIR = os.path.abspath(os.path.join(__file__, '..'))
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_DIR, 'templates')
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_DIR, 'templates'),
 )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django.contrib.comments',
     'django.contrib.contenttypes',
-    'django.contrib.sessions', #this is for db sessions
+    'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.comments',
-    'bjj2.app',
-    'socialauth',
-    'openid_consumer',
-    'sentry',
-    'sentry.client',
-    'memcache_status',
-    'djcelery',
-    'registration',
+    'app',
     'poll',
-    'uni_form',
-    'django_extensions',
-    'south',
-    'haystack',
-    'threadedcomments',
     'custom_threadedcomments',
+    'django_extensions',
+    'djcelery',
+    'haystack',
+    'memcache_status',
+    'openid_consumer',
+    'registration',
+    #'sentry',
+    #'sentry.client',
+    'socialauth',
+    'south',
+    'threadedcomments',
+    'uni_form'
 )
 
-COMMENTS_APP = 'custom_threadedcomments'
-
-## HAYSTACK ##
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        # For Solr:
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8090/solr/',
-        'TIMEOUT': 60 * 5,
-        'INCLUDE_SPELLING': True,
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
     },
-} 
-## END HAYSTACK ###
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
 
-##REGISTRATION
-ACCOUNT_ACTIVATION_DAYS = 1
-## END REG
-
-### SESSION CACHING ##
-#SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-### END SESSION CACHING
-
-#### BEGIN DEBUG-TOOLBAR ###
-INTERNAL_IPS = ('127.0.0.1', '98.169.202.248')
-#### END DEBUG-TOOLBAR ####
-
-### BEGIN SOCIALAUTH ###
-LOGIN_REDIRECT_URL = '/'
-
-LOGOUT_REDIRECT_URL = '/'
+AUTH_PROFILE_MODULE = 'app.UserProfile'
+COMMENTS_APP = 'custom_threadedcomments'
 
 from localsettings import *
 
 MIDDLEWARE_CLASSES += LOCAL_SETTINGS_MIDDLEWARE
-
-from socialauth_settings import *
-
-### END SOCIALAUTH ###
-
-import logging
-from sentry.client.handlers import SentryHandler
-
-logging.getLogger().setLevel(logging.INFO)
-logger = logging.getLogger()# ensure we havent already registered the handler
-if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
-    logger.addHandler(SentryHandler())
-
-    # Add StreamHandler to sentry's default so you can catch missed exceptions
-    logger = logging.getLogger('sentry.errors')
-    logger.propagate = False
-    logger.addHandler(logging.StreamHandler())
-
-import sys
-
-if 'test' in sys.argv:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase'
-    }
-    CACHES = {}
-    MIDDLEWARE_CLASSES = (
-        #'johnny.middleware.LocalStoreClearMiddleware',
-        #'johnny.middleware.QueryCacheMiddleware',
-        #'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'openid_consumer.middleware.OpenIDMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'sentry.client.middleware.Sentry404CatchMiddleware',
-    )
-
-
