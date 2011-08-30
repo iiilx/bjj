@@ -165,5 +165,6 @@ AUTH_PROFILE_MODULE = 'app.UserProfile'
 COMMENTS_APP = 'custom_threadedcomments'
 
 from localsettings import *
+from socialauth_settings import *
 
 MIDDLEWARE_CLASSES += LOCAL_SETTINGS_MIDDLEWARE
