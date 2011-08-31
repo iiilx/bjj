@@ -7,7 +7,6 @@ from app.models import profile_callback
 from app.forms import RegForm
 
 urlpatterns = patterns('',
-    # Examples:
     url(r'^accounts/', include('socialauth.urls')),
     url(r'^accts/', include('registration.urls')),
     url(r'^accts/register/$', register, {'form_class':RegForm, 'profile_callback':profile_callback}, name='registration_register'),

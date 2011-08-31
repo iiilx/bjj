@@ -7,22 +7,21 @@ from urllib import urlencode
 from random import choice
 from datetime import datetime
 
-from django.views.generic.simple import direct_to_template
-from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as login_user, logout as logout_user
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import Context, Template, RequestContext
 from django.utils.http import urlquote 
+from django.views.generic.simple import direct_to_template
 
 from app.forms import *
 from app.models import *
 from app.messaging import send_increment_upvotes
-from app.processors import top_polls_processor
 
 cache = memcache.Client(['127.0.0.1:11211'])
 
@@ -41,32 +40,6 @@ def login(request):
 def logout(request):
     logout_user(request)
     return HttpResponseRedirect(reverse('home'))
-
-def get_all_cats():
-    cats = Category.objects.all()
-
-def get_uncat_count():
-    return cache.get('%s-uncat_count' % PREFIX)
-
-def get_uncat(request):
-    if request.user.is_authenticated():
-        uncat = Post.objects.filter(category = None)
-        if uncat:
-            post = choice(uncat)
-            form = PostCatForm(instance = post)
-        return form
-    return None
- 
-
-def admin_check(fn):
-    def wrapped(request, *args, **kwargs):
-        output = fn(request, *args, **kwargs)
-        if not isinstance(output, dict):
-            return output
-        template = output.pop('TEMPLATE')
-        output['is_admin'] = request.user.is_superuser
-        return direct_to_template(request, template, output)
-    return wrapped
 
 def paginate(request, all_posts):
     paginator = Paginator(all_posts, 25)
@@ -102,12 +75,6 @@ def get_page(request):
     except ValueError:
         page = 1
     return page
-
-def get_tup(page, objects):
-    last = page * PPP + 1
-    first = last - PPP
-    nums = range(first,last)
-    return zip(nums,objects)
 
 def home(request):
     page = get_page(request)
@@ -154,18 +121,6 @@ def latest(request):
                 'page':page, 'prev_p':prev_p, 'next_p':next_p, 
                 'num_uncat':get_uncat_count(), 'list_of_tups':py,
                 'title':'Latest'})
-
-def latest2(request):
-    page = get_page(request)
-    last_p = cache.get('%s-latest-ct' % PREFIX)
-    if not last_p or page > last_p:
-        json = 0 
-    else:
-        json = cache.get('%s-latest-%s' % (PREFIX, page))
-    prev_p, next_p = paginate_(page, last_p)
-    return direct_to_template(request, 'generic_posts.html',{
-                'page':page, 'prev_p':prev_p, 'next_p':next_p, 
-                'num_uncat':get_uncat_count(), 'json_posts':json})
 
 @login_required
 def add_post2(request):
@@ -256,12 +211,6 @@ def edit_profile(request):
         form = ProfileForm(instance = profile)
     return direct_to_template(request, 'edit_profile.html', {'form':form, 'title':'Edit Profile'})
 
-def edit_profile_ajax(request):
-    if request.method == "POST":
-        pass
-    else:
-        raise Http404
-
 @login_required
 def upvote(request):
     if request.method == "POST":
@@ -269,7 +218,6 @@ def upvote(request):
             post_id = request.POST.get('post_id')        
             #post = Post.objects.get(pk=int(post_id))
         except:
-            logger.warning('couldnt get post', exc_info=sys.exc_info())
             raise Http404
         else:
             try:
@@ -299,7 +247,6 @@ def upvote_async(request):
             post_id = request.POST.get('post_id')        
             #post = Post.objects.get(pk=int(post_id))
         except:
-            logger.warning('couldnt get post', exc_info=sys.exc_info())
             raise Http404
         else:
             send_increment_upvotes(post_id)
