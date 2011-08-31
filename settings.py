@@ -81,6 +81,7 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "socialauth.context_processors.facebook_api_key",
+    "app.processors.domain",
     "app.processors.categories",
     "app.processors.fbook_url",
     "app.processors.top_polls_processor",

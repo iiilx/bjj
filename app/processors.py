@@ -9,8 +9,8 @@ from poll.models import Poll
 cache = memcache.Client(['127.0.0.1:11211'])
 
 request_variables = {
-    'client_id': socialauth_settings.FACEBOOK_APP_ID,
-    'redirect_uri': 'http://bjjlinks.com/accounts/facebook_login/done/',
+    'client_id': settings.FACEBOOK_APP_ID,
+    'redirect_uri': 'http://%s/accounts/facebook_login/done/' % settings.DOMAIN,
 }
 
 urlencoded_request_variables = urlencode(request_variables)
