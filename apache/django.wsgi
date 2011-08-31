@@ -3,7 +3,10 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(__file__, '../../..')))
 sys.path.append(os.path.abspath(os.path.join(__file__, '../..')))
-
+#sys.path.append(os.path.abspath('../..'))
+#sys.path.append(os.path.abspath('..'))
+#sys.path.append('/srv/www/bjj_project/staging')
+#sys.path.append('/srv/www/bjj_project/staging/bjj')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'bjj.settings'
 os.environ["CELERY_LOADER"] = "django"
 
