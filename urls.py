@@ -3,8 +3,8 @@ from django.contrib import admin
 from registration.views import register
 admin.autodiscover()
 
-from bjj.app.models import profile_callback
-from bjj.app.forms import RegForm
+from app.models import profile_callback
+from app.forms import RegForm
 
 urlpatterns = patterns('',
     # Examples:
