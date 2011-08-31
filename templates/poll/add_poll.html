@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load uni_form_tags %}
 
+{% block title %}
+Add Poll | {{block.super}}
+{% endblock %}
 {% block extrahead %}
 <script>
 var max_choices = {{choice_formset.max_num}};
