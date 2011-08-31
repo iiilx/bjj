@@ -20,7 +20,6 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('bjj.app.views',
     url(r'^$', 'home', name = 'home'),
-    url(r'^home2$', 'home2', name = 'home2'),
     url(r'^add-post2$', 'add_post2', name='add_post2'),
     url(r'^add-post$', 'add_post', name='add_post'),
     url(r'^category/(?P<cat_id>\d+)/', 'category', name='category'),

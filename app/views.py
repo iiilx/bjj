@@ -142,35 +142,6 @@ def home(request):
                 'next_p':next_p, 'title':'Top',  
                 'next':settings.LOGIN_REDIRECT_URL, 
                 'handle_form':handle_form, 'list_of_tups':py})
-def home2(request):
-    page = get_page(request)
-    last_p = cache.get('%s-top-ct' % PREFIX)
-    try:
-        last_p = int(last_p)
-    except:
-        return HttpResponse('issues')
-    if page > last_p:
-        page = 1
-    serialized = cache.get('%s-top-%s' % (PREFIX, page)) 
-    if not serialized: #XXX fail safe here?
-        return HttpResponse('Something is wrong.')
-    py = cPickle.loads(serialized)
-    prev_p, next_p = paginate_(page, last_p)
-    handle_form = None
-    try:
-        profile = request.user.get_profile()
-    except:
-        handle_form = HandleForm() 
-    if request.user.is_superuser:
-        is_admin = "1";
-    else:
-        is_admin = "0";
-    return direct_to_template(request, 'generic_posts.html', {
-                'is_admin':is_admin,'page':page, 'prev_p':prev_p, 
-                'next_p':next_p, 'title':'Top',  
-                #'FB_REDIRECT_URL':FB_REDIRECT_URL, 
-                'next':settings.LOGIN_REDIRECT_URL, 
-                'handle_form':handle_form, 'list_of_tups':py})
 
 def latest(request):
     page = get_page(request)
