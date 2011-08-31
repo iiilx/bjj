@@ -119,7 +119,7 @@ def latest(request):
     py = cPickle.loads(serialized) if serialized else None
     return direct_to_template(request, 'generic_posts.html',{
                 'page':page, 'prev_p':prev_p, 'next_p':next_p, 
-                'num_uncat':get_uncat_count(), 'list_of_tups':py,
+                'list_of_tups':py,
                 'title':'Latest'})
 
 @login_required
