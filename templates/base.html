@@ -131,7 +131,7 @@ FB.init({
 <a href="{{ FB_LOGIN_URL|safe}}">
              <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}icons/facebook-32.png" />
            </a>
-            <a href="http://bjjlinks.com/accounts/openid/?action=verify&openid_next=%2F&openid_identifier=https%3A%2F%2Fwww.google.com%2Faccounts%2Fo8%2Fid"><img src="{{MEDIA_URL}}icons/google-32.png" /></a>
+            <a href="http://{{DOMAIN}}/accounts/openid/?action=verify&openid_next=%2F&openid_identifier=https%3A%2F%2Fwww.google.com%2Faccounts%2Fo8%2Fid"><img src="{{MEDIA_URL}}icons/google-32.png" /></a>
             <a href="{% url socialauth_linkedin_login %}?next=/">
                 <img src="{{MEDIA_URL}}icons/linkedin-32.png" />
             </a> 

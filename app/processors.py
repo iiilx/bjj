@@ -3,7 +3,7 @@ import memcache
 import cPickle
 import cjson
 from urllib import urlencode
-import settings, socialauth_settings
+import settings 
 from poll.models import Poll
 
 cache = memcache.Client(['127.0.0.1:11211'])
@@ -15,6 +15,9 @@ request_variables = {
 
 urlencoded_request_variables = urlencode(request_variables)
 FB_REDIRECT_URL = "https://graph.facebook.com/oauth/authorize?%s" % urlencoded_request_variables
+
+def domain(request):
+    return {'DOMAIN' : settings.DOMAIN}
 
 def fbook_url(request):
     if request.method == "GET":
