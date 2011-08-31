@@ -24,7 +24,7 @@ def poll_index(request):
 def add_poll(request):
     if request.method == "POST":
         poll_form = PollForm(request.POST)
-        choice_formset = ChoiceFormSet(request.POST)
+        choice_formset = ChoiceFormSet(request.POST, prefix='choice')
         if poll_form.is_valid() and choice_formset.is_valid():
             poll = poll_form.save()
             for form in choice_formset:
@@ -35,7 +35,7 @@ def add_poll(request):
             return HttpResponseRedirect(reverse('poll_index'))
     else:
         poll_form = PollForm()
-        choice_formset = ChoiceFormSet()
+        choice_formset = ChoiceFormSet(prefix='choice')
     return direct_to_template(request, 'poll/add_poll.html', {'poll_form':poll_form, 'choice_formset':choice_formset})
 
 def get_random(request):

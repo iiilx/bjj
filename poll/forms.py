@@ -20,5 +20,5 @@ class PollForm(ModelForm):
         fields = ('question',)
 
 #ChoiceFormSet = inlineformset_factory(Poll, Choice, extra=5)
-ChoiceFormSet = formset_factory(ChoiceForm, extra=5, max_num=5, formset=BaseFormSet)
+ChoiceFormSet = formset_factory(ChoiceForm, extra=2, max_num=5, formset=RequiredFormSet)
 

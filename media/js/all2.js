@@ -1,3 +1,101 @@
+$(document).ready(function() {
+  // Code adapted from http://djangosnippets.org/snippets/1389/
+ 
+function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+    var replacement = prefix + '-' + ndx + '-';
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+ replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+  }
+ 
+  function deleteForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    //alert('formcount = ' + formCount);
+    if (formCount > 1) {
+      // Delete the item/form
+      $(btn).parents('.' + prefix).remove();
+ 
+      var forms = $('.' + prefix); // Get all the forms
+        //alert(forms.length); 
+      // Update the total number of forms (1 less than before)
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+ 
+      var i = 0;
+      // Go through the forms and set their indices, names and IDs
+      for (formCount = forms.length; i < formCount; i++) {
+        $(forms.get(i)).children().children().each(function() {
+          if ( $(this).attr('type') == 'text' )
+            updateElementIndex(this, prefix, i);
+        });
+      }
+ 
+    } // End if
+    else {
+        alert("You have to enter at least one "+prefix+"!");
+    }
+    return false;
+  }
+ 
+  function addForm(btn, prefix) {
+    //alert(prefix);
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    //alert(formCount); 
+    if (formCount < max_choices) {
+      // Clone a form (without event handlers) from the first form
+      var row = $("."+prefix+":first").clone(false).get(0);
+      // Insert it after the last form
+      $(row).append('<p class="left_wide"><a class="delete" href="#">remove</a></p>')
+      $(row).removeAttr('id').hide().insertAfter("."+prefix+":last").addClass("dot-top").slideDown(300);
+ 
+      // Remove the bits we don't want in the new row/form
+      // e.g. error messages
+      $(".errorlist", row).remove();
+      $(row).children().removeClass("error");
+ 
+      // Relabel or rename all the relevant bits
+      $(row).children().children().each(function() {
+        updateElementIndex(this, prefix, formCount);
+        $(this).val("");
+      });
+ 
+      // Add an event handler for the delete item/form link
+      $(row).find(".delete").click(function() {
+        return deleteForm(this, prefix);
+      });
+ 
+      // Update the total form count
+      $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1); 
+ 
+    } // End if
+    else {
+        var ending = ''; 
+        if(prefix[prefix.length-1] == 's'){ 
+            ending = 'es' 
+        } 
+        else {
+            ending = 's'
+        };
+        alert("Sorry, you can only enter a maximum of " + max_choices + ' ' + prefix + ending + ".");
+    }
+    return false;
+  }
+ 
+  // Register the click event handlers
+  $(".add").click(function() {
+    var prefix = $(this).parent().next().next().next().next().attr('class').split(" ")[0];//$(this).parent().prev().attr("class")
+    return addForm(this, prefix);
+
+  });
+ 
+  $(".delete").click(function() {
+    var prefix = $(this).parent().parent().attr("class");
+    return deleteForm(this, prefix);
+  });
+ 
+});
+
 function show_reply_form(comment_id, parent_id) {
     var comment_reply = $('#' + comment_id);
     var to_add = $('<div class="response"></div>');

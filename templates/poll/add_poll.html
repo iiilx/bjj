@@ -1,14 +1,22 @@
 {% extends "base.html" %}
+{% load uni_form_tags %}
+
+{% block extrahead %}
+<script>
+var max_choices = {{choice_formset.max_num}};
+</script>
+{% endblock %}
 
 {% block content %}
 <div style="padding-left:10px"class="min">
-<form action="" method="post"> {% csrf_token %}
+<form class="uniForm" action="" method="post"> {% csrf_token %}
     
-{{ poll_form.as_p }}
+{{ poll_form|as_uni_form }}
 
+<div class="dark">Choices <a class="add" href="#">Add another choice</a></div>
 {{ choice_formset.management_form }}
 {% for form in choice_formset.forms %}
-{{ form.as_p }}
+    <div class="{{choice_formset.prefix}}">{{ form|as_uni_form }}</div>
 {% endfor %}
 
 <p><input type="submit" value="Submit"></p>
