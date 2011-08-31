@@ -106,8 +106,11 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = 'bjj.urls'
 
 import os
+import sys
 
 PROJECT_DIR = os.path.abspath(os.path.join(__file__, '..'))
+
+sys.path.append(os.path.abspath(os.path.join(__file__, '../..')))
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
