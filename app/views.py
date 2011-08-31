@@ -19,12 +19,10 @@ from django.shortcuts import render_to_response
 from django.template import Context, Template, RequestContext
 from django.utils.http import urlquote 
 
-from bjj import settings
-from bjj.app.forms import *
+from app.forms import *
 from app.models import *
-from bjj.app.messaging import send_increment_upvotes
-from bjj.app.processors import top_polls_processor
-import socialauth_settings
+from app.messaging import send_increment_upvotes
+from app.processors import top_polls_processor
 
 cache = memcache.Client(['127.0.0.1:11211'])
 
