@@ -20,5 +20,6 @@ johnny-cache
 django-celery
 python-cjson
 kombu
+-e git+https://github.com/toastdriven/django-haystack.git#egg=haystack
 -e git+https://github.com/facebook/python-sdk.git#egg=facebook
 -e git+git@github.com:iiilx/browsertools.git#egg=browsertools
