@@ -57,9 +57,6 @@ def get_most_discussed():
 def calculate_score(votes, item_hour_age, gravity=1.8):
     return votes / pow((item_hour_age + 2), gravity)
 
-def get_html(objects, template):
-    return loader.render_to_string(template, {'objects':objects, 'MEDIA_URL':settings.MEDIA_URL})
-
 def chunks(l, n):
     """ Yield successive n-sized chunks from l.
     """
