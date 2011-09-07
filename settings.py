@@ -129,7 +129,7 @@ INSTALLED_APPS = (
     'poll',
     'custom_threadedcomments',
     'django_extensions',
-    'djcelery',
+    #'djcelery',
     'haystack',
     'memcache_status',
     'openid_consumer',
