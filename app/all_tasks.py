@@ -13,7 +13,6 @@ from django.contrib.contenttypes.models import ContentType
 
 import logging
 import memcache
-import cjson
 import cPickle
 
 from datetime import datetime, timedelta 
@@ -118,18 +117,6 @@ def update_top2():
     cache.set('%s-top-ct' % PREFIX, max_pages)        
     #print max_pages
     #print cache.get('bjj-top-ct')
-
-def get_uncat():
-    uncat = Post.objects.filter(category=None)
-    py = [post.id for post in uncat]
-    json = cjson.encode(py)
-    cache.set('%s-uncat' % PREFIX, json)
-
-def all_cats():
-    cats = Category.objects.all()
-    lot = [(cat.name, cat.url_name, cat.id) for cat in cats]
-    json = cjson.encode(lot)
-    cache.set('%s-all-cats' % PREFIX, json)
 
 def update_all():
     #update_uncat_count()
