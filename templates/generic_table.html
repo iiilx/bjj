@@ -1,11 +1,14 @@
+{% load comments %}
+
 <table id="p-t" border="0">
     <tbody id="posts">
-        {% for tup in list_of_tups %}
+        {% for post in posts %}
+        {% get_comment_count for post as comment_count %}
         <tr>
             <td class="rank"></td>
-            <td class="cell"><a href="{% if tup.6 %}/post/{{tup.0}}/{{tup.2|slugify}}{% else %}{{tup.1}}" target="blank{% endif %}">{{ tup.2 }}</a></td>
-            <td id="{{tup.0}}" class="green">+{{ tup.3 }}</td>
-            <td><a href="/post/{{tup.0}}/{{tup.2|slugify}}#comments" class="yellow comm">{{ tup.5 }} comments</a> <span class="comm"> by </span> <a href="/profile/{{tup.4}}" class="name">{{ tup.4 }}</a></td>
+            <td class="cell"><a href="{% if tup.6 %}/post/{{post.id}}/{{post.title|slugify}}{% else %}{{post.post_url}}" target="blank{% endif %}">{{ post.title }}</a></td>
+            <td id="{{post.id}}" class="green">+{{ post.upvotes }}</td>
+            <td><a href="/post/{{post.id}}/{{post.title|slugify}}#comments" class="yellow comm">{{ comment_count }} comments</a> <span class="comm"> by </span> <a href="/profile/{{post.author.get_profile.handle}}" class="name">{{ post.author.get_profile.handle }}</a></td>
         </tr>
         {% endfor %}
     </tbody>

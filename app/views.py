@@ -88,6 +88,7 @@ def home(request):
         py = cPickle.loads(serialized)
         prev_p, next_p = paginate_(page, last_p)
     handle_form = None
+    posts = Post.objects.filter(id__in=py) if py else None
     if request.user.is_authenticated():
         try:
             profile = request.user.get_profile()
@@ -102,7 +103,7 @@ def home(request):
                 'is_admin':is_admin,'page':page, 'prev_p':prev_p, 
                 'next_p':next_p, 'title':'Top',  
                 'next':settings.LOGIN_REDIRECT_URL, 
-                'handle_form':handle_form, 'list_of_tups':py})
+                'handle_form':handle_form, 'posts':posts})
 
 def latest(request):
     page = get_page(request)
@@ -113,9 +114,10 @@ def latest(request):
         serialized = cache.get('latest-%s' % page)
     prev_p, next_p = paginate_(page, last_p)
     py = cPickle.loads(serialized) if serialized else None
+    posts = Post.objects.filter(id__in=py) if py else None
     return direct_to_template(request, 'generic_posts.html',{
                 'page':page, 'prev_p':prev_p, 'next_p':next_p, 
-                'list_of_tups':py,
+                'posts':posts,
                 'title':'Latest'})
 
 @login_required
@@ -263,8 +265,9 @@ def category(request, cat_id):
         serialized = cache.get('cat-%s-%s' % (cat.id, page))
     prev_p, next_p = paginate_(page, last_p)
     py = cPickle.loads(serialized) if serialized else None
+    posts = Post.objects.filter(id__in=py) if py else None
     title = cat.name
     if cat.seo_name:
         title=cat.seo_name
-    return direct_to_template(request, 'generic_posts.html', {'title': title, 'page':page,'prev_p':prev_p, 'next_p':next_p, 'list_of_tups':py})
+    return direct_to_template(request, 'generic_posts.html', {'title': title, 'page':page,'prev_p':prev_p, 'next_p':next_p, 'posts':posts})
 

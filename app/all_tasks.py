@@ -28,7 +28,6 @@ PPP = 25
 MAX_PAGES = LIMIT/PPP
 TABLE_TEMPLATE = 'generic_table.html'
 CATS_TEMPLATE = 'cached_cats.html'
-PREFIX = settings.PREFIX
 post_ctype = ContentType.objects.get(name="post")
 
 def get_top_polls():
@@ -70,9 +69,8 @@ def update_latest2():
     count = Post.objects.all().order_by('-pk')[:LIMIT].count()
     chunked = chunks(all_posts, PPP)
     for i, chunk in enumerate(chunked):
-        lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
-        path = '/srv/www/bjj/latest-%s.txt' % i
-        cache.set('latest-%s' % (i+1), cPickle.dumps(lot))
+        pks = [post.id for post in chunk]
+        cache.set('latest-%s' % (i+1), cPickle.dumps(pks))
     cache.set('latest-ct', get_max_pages(count))
 
 def update_top_cats2():
@@ -82,8 +80,8 @@ def update_top_cats2():
         count = Post.objects.filter(category = cat).order_by('-pk')[:LIMIT].count()
         chunked = create_chunked(all_posts)
         for i, chunk in enumerate(chunked): #a chunk is 25 post objects
-            lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
-            cache.set('cat-%s-%s' % (cat.id, (i+1)), cPickle.dumps(lot))
+            pks = [post.id for post in chunk]
+            cache.set('cat-%s-%s' % (cat.id, (i+1)), cPickle.dumps(pks))
         cache.set('cat-ct-%s' % cat.id, get_max_pages(count))
 
 def get_max_pages(count):
@@ -107,8 +105,8 @@ def update_top2():
     count = Post.objects.all().order_by('-pk')[:LIMIT].count()
     chunked = create_chunked(all_posts)        
     for i, chunk in enumerate(chunked):  # a chunk is a list of 25 post objects 
-        lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
-        cache.set('top-%s' % (i+1), cPickle.dumps(lot))
+        pks = [post.id for post in chunk]
+        cache.set('top-%s' % (i+1), cPickle.dumps(pks))
     max_pages = get_max_pages(count)
     cache.set('top-ct', max_pages)        
 
