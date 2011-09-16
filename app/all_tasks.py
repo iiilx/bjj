@@ -10,9 +10,9 @@ from django.core.management import setup_environ
 from bjj import settings
 setup_environ(settings)
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 
 import logging
-import memcache
 import cPickle
 
 from datetime import datetime, timedelta 
@@ -23,7 +23,6 @@ from custom_threadedcomments.models import CustomThreadedComment
 from poll.models import Poll
 
 logger = logging.getLogger()
-cache = memcache.Client(['127.0.0.1:11211'])
 LIMIT = 5000
 PPP = 25
 MAX_PAGES = LIMIT/PPP
@@ -51,7 +50,7 @@ def get_most_discussed():
     posts_and_counts = [(post, get_comment_count(post.pk)) for post in posts]
     posts_and_counts.sort(key = lambda tup: tup[1], reverse=True)
     top3 = [(tup[0].pk, tup[0].title) for tup in posts_and_counts[0:3]]
-    cache.set('%s-top3' % PREFIX, cPickle.dumps(top3))
+    cache.set('top3', cPickle.dumps(top3))
 
 def calculate_score(votes, item_hour_age, gravity=1.8):
     return votes / pow((item_hour_age + 2), gravity)
@@ -64,7 +63,7 @@ def chunks(l, n):
 
 def update_uncat_count():
     num_uncat = Post.objects.filter(category=None).count()
-    cache.set('%s-uncat_count' % PREFIX, str(num_uncat))
+    cache.set('uncat_count', str(num_uncat))
 
 def update_latest2():
     all_posts = Post.objects.all().order_by('-pk')[:LIMIT]
@@ -73,8 +72,8 @@ def update_latest2():
     for i, chunk in enumerate(chunked):
         lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
         path = '/srv/www/bjj/latest-%s.txt' % i
-        cache.set('%s-latest-%s' % (PREFIX, (i+1)), cPickle.dumps(lot))
-    cache.set('%s-latest-ct' % PREFIX, get_max_pages(count))
+        cache.set('latest-%s' % (i+1), cPickle.dumps(lot))
+    cache.set('latest-ct', get_max_pages(count))
 
 def update_top_cats2():
     cats = Category.objects.all()
@@ -84,10 +83,8 @@ def update_top_cats2():
         chunked = create_chunked(all_posts)
         for i, chunk in enumerate(chunked): #a chunk is 25 post objects
             lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
-            cache.set('%s-cat-%s-%s' % (PREFIX, cat.id, (i+1)), cPickle.dumps(lot))
-            #print str == cache.get('%s-top-%s' % (PREFIX, (i+1))) 
-            #print repr(cPickle.loads(str))
-        cache.set('%s-cat-ct-%s' % (PREFIX, cat.id), get_max_pages(count))
+            cache.set('cat-%s-%s' % (cat.id, (i+1)), cPickle.dumps(lot))
+        cache.set('cat-ct-%s' % cat.id, get_max_pages(count))
 
 def get_max_pages(count):
     return  int(ceil(count / float(PPP)))
@@ -111,12 +108,9 @@ def update_top2():
     chunked = create_chunked(all_posts)        
     for i, chunk in enumerate(chunked):  # a chunk is a list of 25 post objects 
         lot = [(post.id, post.post_url, post.title, post.upvotes, post.author.get_profile().handle if post.author else 0, get_comment_count(post.pk), post.is_youtube) for post in chunk]
-        cache.set('%s-top-%s' % (PREFIX, (i+1)), cPickle.dumps(lot))
+        cache.set('top-%s' % (i+1), cPickle.dumps(lot))
     max_pages = get_max_pages(count)
-    #print 'max pages: %s' % max_pages
-    cache.set('%s-top-ct' % PREFIX, max_pages)        
-    #print max_pages
-    #print cache.get('bjj-top-ct')
+    cache.set('top-ct', max_pages)        
 
 def update_all():
     #update_uncat_count()

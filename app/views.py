@@ -1,5 +1,4 @@
 import sys
-import memcache
 import cjson
 import cPickle
 
@@ -12,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as login_user, logout as logout_user
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -22,10 +22,6 @@ from django.views.generic.simple import direct_to_template
 from app.forms import *
 from app.models import *
 from app.messaging import send_increment_upvotes
-
-cache = memcache.Client(['127.0.0.1:11211'])
-
-PREFIX = settings.PREFIX
 
 def login(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -78,7 +74,7 @@ def get_page(request):
 
 def home(request):
     page = get_page(request)
-    last_p = cache.get('%s-top-ct' % PREFIX)
+    last_p = cache.get('top-ct')
     try:
         last_p = int(last_p)
     except:
@@ -86,7 +82,7 @@ def home(request):
     else:
         if page > last_p:
             page = 1
-        serialized = cache.get('%s-top-%s' % (PREFIX, page)) 
+        serialized = cache.get('top-%s' % page) 
         if not serialized: #XXX fail safe here?
             return HttpResponse('Something is wrong.')
         py = cPickle.loads(serialized)
@@ -110,11 +106,11 @@ def home(request):
 
 def latest(request):
     page = get_page(request)
-    last_p = cache.get('%s-latest-ct' % PREFIX)
+    last_p = cache.get('latest-ct')
     if not last_p or page > last_p:
         serialized = 0 
     else:
-        serialized = cache.get('%s-latest-%s' % (PREFIX, page))
+        serialized = cache.get('latest-%s' % page)
     prev_p, next_p = paginate_(page, last_p)
     py = cPickle.loads(serialized) if serialized else None
     return direct_to_template(request, 'generic_posts.html',{
@@ -260,11 +256,11 @@ def category(request, cat_id):
     except:
         raise Http404
     page = get_page(request)
-    last_p = cache.get('%s-cat-ct-%s' % (PREFIX, cat.id))
+    last_p = cache.get('cat-ct-%s' % cat.id)
     if not last_p or page > last_p:
         serialized = 0 
     else:
-        serialized = cache.get('%s-cat-%s-%s' % (PREFIX, cat.id, page))
+        serialized = cache.get('cat-%s-%s' % (cat.id, page))
     prev_p, next_p = paginate_(page, last_p)
     py = cPickle.loads(serialized) if serialized else None
     title = cat.name

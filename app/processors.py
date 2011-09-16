@@ -1,12 +1,10 @@
+from django.core.cache import cache
+
 from app.models import Category
-import memcache
 import cPickle
-import cjson
 from urllib import urlencode
 import settings 
 from poll.models import Poll
-
-cache = memcache.Client(['127.0.0.1:11211'])
 
 request_variables = {
     'client_id': settings.FACEBOOK_APP_ID,
@@ -37,14 +35,7 @@ def top_polls_processor(request):
     return {'top_polls':all_polls}
 
 def most_discussed_processor(request):
-    posts = cache.get('%s-top3' % settings.PREFIX)
+    posts = cache.get('top3')
     posts = cPickle.loads(posts) if posts else None
     return {'most_discussed':posts}
  
-def categories_old(request):
-    if request.method == "GET":
-        json = cache.get('%s-all-cats' % settings.PREFIX)
-        cats = cjson.decode(json)
-        return {'cats':cats}
-    else:
-        return {}
