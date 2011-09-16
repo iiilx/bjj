@@ -97,6 +97,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
@@ -138,9 +139,14 @@ INSTALLED_APPS = (
     #'sentry.client',
     'socialauth',
     'south',
+    'debug_toolbar',
     'threadedcomments',
     'uni_form'
 )
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
