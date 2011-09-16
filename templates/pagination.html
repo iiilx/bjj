@@ -1,6 +1,8 @@
-{% if prev_p %} <a href="?page={{prev_p}}">previous</a> {% endif %}
-    <span class="current">
-        Page {{ page }}
-    </span>
-{% if next_p %} <a href="?page={{next_p}}">next</a> {% endif %}
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}">previous</a>
+        {% endif %}
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">next</a>
+        {% endif %}
 

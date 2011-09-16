@@ -37,13 +37,8 @@ def logout(request):
     logout_user(request)
     return HttpResponseRedirect(reverse('home'))
 
-def paginate(request, all_posts):
+def paginate(all_posts, page):
     paginator = Paginator(all_posts, 25)
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-    # If page request (9999) is out of range, deliver last page of results.
     try:
         posts = paginator.page(page)
     except (EmptyPage, InvalidPage):
@@ -74,21 +69,14 @@ def get_page(request):
 
 def home(request):
     page = get_page(request)
-    last_p = cache.get('top-ct')
-    try:
-        last_p = int(last_p)
-    except:
-        py, prev_p , next_p = None, None, None 
-    else:
-        if page > last_p:
-            page = 1
-        serialized = cache.get('top-%s' % page) 
-        if not serialized: #XXX fail safe here?
-            return HttpResponse('Something is wrong.')
+    serialized = cache.get('top-%s' % page) 
+    if serialized: #XXX fail safe here?
         py = cPickle.loads(serialized)
-        prev_p, next_p = paginate_(page, last_p)
+        posts = Post.objects.filter(id__in=py) if py else None
+        posts = paginate(posts, page)
+    else:
+        posts = None
     handle_form = None
-    posts = Post.objects.filter(id__in=py) if py else None
     if request.user.is_authenticated():
         try:
             profile = request.user.get_profile()
@@ -100,25 +88,38 @@ def home(request):
     else:
         is_admin = "0";
     return direct_to_template(request, 'generic_posts.html', {
-                'is_admin':is_admin,'page':page, 'prev_p':prev_p, 
-                'next_p':next_p, 'title':'Top',  
-                'next':settings.LOGIN_REDIRECT_URL, 
+                'is_admin':is_admin, 'next':settings.LOGIN_REDIRECT_URL, 
                 'handle_form':handle_form, 'posts':posts})
 
 def latest(request):
     page = get_page(request)
-    last_p = cache.get('latest-ct')
-    if not last_p or page > last_p:
-        serialized = 0 
+    serialized = cache.get('latest-%s' % page)
+    if serialized:
+        py = cPickle.loads(serialized) if serialized else None
+        posts = Post.objects.filter(id__in=py) if py else None
+        posts = paginate(posts, page)
     else:
-        serialized = cache.get('latest-%s' % page)
-    prev_p, next_p = paginate_(page, last_p)
-    py = cPickle.loads(serialized) if serialized else None
-    posts = Post.objects.filter(id__in=py) if py else None
+        posts = None
     return direct_to_template(request, 'generic_posts.html',{
-                'page':page, 'prev_p':prev_p, 'next_p':next_p, 
-                'posts':posts,
-                'title':'Latest'})
+                'posts':posts, 'title':'Latest'})
+
+def category(request, cat_id):
+    try:
+        cat = Category.objects.get(pk=cat_id)
+    except:
+        raise Http404
+    page = get_page(request)
+    serialized = cache.get('cat-%s-%s' % (cat.id, page))
+    if serialized:
+        py = cPickle.loads(serialized) if serialized else None
+        posts = Post.objects.filter(id__in=py) if py else None
+        posts = paginate(posts, page)
+    else:
+        posts = None
+    title = cat.name
+    if cat.seo_name:
+        title = cat.seo_name
+    return direct_to_template(request, 'generic_posts.html', {'title': title, 'page':page, 'posts':posts})
 
 @login_required
 def add_post2(request):
@@ -252,22 +253,4 @@ def upvote_async(request):
     else:
         raise Http404
 
-def category(request, cat_id):
-    try:
-        cat = Category.objects.get(pk=cat_id)
-    except:
-        raise Http404
-    page = get_page(request)
-    last_p = cache.get('cat-ct-%s' % cat.id)
-    if not last_p or page > last_p:
-        serialized = 0 
-    else:
-        serialized = cache.get('cat-%s-%s' % (cat.id, page))
-    prev_p, next_p = paginate_(page, last_p)
-    py = cPickle.loads(serialized) if serialized else None
-    posts = Post.objects.filter(id__in=py) if py else None
-    title = cat.name
-    if cat.seo_name:
-        title=cat.seo_name
-    return direct_to_template(request, 'generic_posts.html', {'title': title, 'page':page,'prev_p':prev_p, 'next_p':next_p, 'posts':posts})
 

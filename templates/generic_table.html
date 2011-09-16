@@ -2,7 +2,7 @@
 
 <table id="p-t" border="0">
     <tbody id="posts">
-        {% for post in posts %}
+        {% for post in posts.object_list %}
         {% get_comment_count for post as comment_count %}
         <tr>
             <td class="rank"></td>
