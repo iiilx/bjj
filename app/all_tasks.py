@@ -28,7 +28,6 @@ PPP = 25
 MAX_PAGES = LIMIT/PPP
 TABLE_TEMPLATE = 'generic_table.html'
 CATS_TEMPLATE = 'cached_cats.html'
-post_ctype = ContentType.objects.get(name="post")
 
 def get_top_polls():
     polls = Poll.objects.all()
@@ -40,9 +39,6 @@ def get_top_polls():
         poll_list.append((poll, count))
     poll_list.sort(key=lambda tup: tup[1], reverse=True)
     top_polls_by_id = [tup[0].pk for tup in poll_list]
-
-def get_comment_count(post_pk):
-    return CustomThreadedComment.objects.filter(content_type=post_ctype, object_pk=post_pk).count()
 
 def get_most_discussed():
     posts = Post.objects.all()
