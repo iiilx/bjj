@@ -124,16 +124,13 @@ function hide_reply_form(comment_id, url) {
 }
 
 $(document).ready(function() {
-$("#p-t tr").hover(
-   function()
-   {
-    $(this).addClass("highlight");
-   },
-   function()
-   {
-    $(this).removeClass("highlight");
-   }
-  )
+    $("#p-t tr").hover(
+       function()  {
+        $(this).addclass("highlight");
+       }, function() {
+        $(this).removeclass("highlight");
+       }
+      );
     // fade in points
     var belt='';
     var points = parseInt($('#pts').html());
