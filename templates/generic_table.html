@@ -6,7 +6,7 @@
         {% get_comment_count for post as comment_count %}
         <tr>
             <td class="rank"></td>
-            <td class="cell"><a href="{% if tup.6 %}/post/{{post.id}}/{{post.title|slugify}}{% else %}{{post.post_url}}" target="blank{% endif %}">{{ post.title }}</a></td>
+            <td class="cell"><a href="{% if post.is_youtube %}/post/{{post.id}}/{{post.title|slugify}}{% else %}{{post.post_url}}" target="blank{% endif %}">{{ post.title }}</a></td>
             <td id="{{post.id}}" class="green">+{{ post.upvotes }}</td>
             <td><a href="/post/{{post.id}}/{{post.title|slugify}}#comments" class="yellow comm">{{ comment_count }} comments</a> <span class="comm"> by </span> <a href="/profile/{{post.author.get_profile.handle}}" class="name">{{ post.author.get_profile.handle }}</a></td>
         </tr>
