@@ -1,13 +1,11 @@
 from haystack import indexes
-from bjj.app.models import Post
+from poll.models import Poll
 
-class PostIndex(indexes.SearchIndex, indexes.Indexable):
+class PollIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-    author = indexes.CharField(model_attr='author')
 
     def get_model(self):
-        return Post
+        return Poll 
 
     def index_queryset(self):
         return self.get_model().objects.all()
-
