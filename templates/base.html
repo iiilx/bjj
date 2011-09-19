@@ -100,6 +100,10 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
         <div class="section min" id="introduction">
     <center>{% block page_title %}<h2>{{title}}</h2>{% endblock %}</center>
         <hr id="ti" />
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        <hr id="ti" />
+        {% endfor %}
    {% block content %}{% endblock %}
         </div>
     </div>

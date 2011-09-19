@@ -127,18 +127,18 @@ def add_post2(request):
         profile.points += 1
         profile.save()
         request.user.message_set.create(message = 'Successfully posted.')
-        return HttpResponseRedirect(reverse('site_message'))
+        return HttpResponseRedirect(reverse('single_post', args=(post.id,)))
     if request.method == "POST":
         post = Post(author=request.user)
         if request.POST.get("post_url"):
             form1 = AddLinkPostForm(request.POST, instance=post)
             if form1.is_valid():
-                form1.save()
+                post = form1.save()
                 handle_success()
         else:
             form2 = AddTextPostForm(request.POST, instance=post)
             if form2.is_valid():
-                form2.save()
+                post = form2.save()
                 handle_success()
     else:
         form1 = AddLinkPostForm()
@@ -151,12 +151,12 @@ def add_post(request):
         post = Post(author=request.user)
         form = AddPostForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
+            post = form.save()
             profile = request.user.get_profile()
             profile.points += 1
             profile.save()
             request.user.message_set.create(message = 'Successfully posted.')
-            return HttpResponseRedirect(reverse('site_message'))
+            return HttpResponseRedirect(reverse('single_post', args=(post.id,)))
     else:
         form = AddPostForm()
     return direct_to_template(request, 'add_post.html', {'form':form, 'title':'Add Post'})
