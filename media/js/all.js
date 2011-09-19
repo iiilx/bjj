@@ -36,12 +36,12 @@ $(document).ready(function() {
     for(var i=0; i < num_posts; i++){
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
-        if(is_admin) {
-            td1.innerHTML = '<a href="/admin/hn/post/'+ posts[i][0] +'/">' + (25*(page_num-1) + (i+1)) +'</a>';
-        }
-        else {
-            td1.innerHTML = 25*(page_num-1) + (i+1); 
-        }
+        //if(is_admin) {
+        //    td1.innerHTML = '<a href="/admin/hn/post/'+ posts[i][0] +'/">' + (25*(page_num-1) + (i+1)) +'</a>';
+        //}
+        //else {
+        td1.innerHTML = 25*(page_num-1) + (i+1); 
+        //}
         var td2 = document.createElement("td");
         var upvote = document.createElement("a");
         upvote.onclick = Function('return upvotePost(' + posts[i][0] + ')');

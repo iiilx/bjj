@@ -95,12 +95,8 @@ def home(request):
         except:
             UserProfile.objects.create(user=request.user, handle=request.user.username)
             handle_form = HandleForm() 
-    if request.user.is_superuser:
-        is_admin = "1";
-    else:
-        is_admin = "0";
     return direct_to_template(request, 'generic_posts.html', {
-                'is_admin':is_admin,'page':page, 'prev_p':prev_p, 
+                'page':page, 'prev_p':prev_p, 
                 'next_p':next_p, 'title':'Top',  
                 'next':settings.LOGIN_REDIRECT_URL, 
                 'handle_form':handle_form, 'posts':posts})
