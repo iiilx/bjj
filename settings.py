@@ -91,7 +91,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
 )
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE_CLASSES = (
     'johnny.middleware.LocalStoreClearMiddleware',
     'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,16 +102,13 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'sentry.client.middleware.Sentry404CatchMiddleware',
-]
+)
 
 ROOT_URLCONF = 'bjj.urls'
 
 import os
-import sys
 
 PROJECT_DIR = os.path.abspath(os.path.join(__file__, '..'))
-
-sys.path.append(os.path.abspath(os.path.join(__file__, '../..')))
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
