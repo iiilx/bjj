@@ -55,6 +55,7 @@ p, ul, pre {
   margin-bottom:10px;
 }
 
+ul {list-style:none;}
 table th {padding:5px 10px;;text-decoration:underline;}
 table tbody td {
 vertical-align:middle;
@@ -559,7 +560,6 @@ body#homepage #main_content .row-content {
   font-size: 11pt;
 }
 .features ul {
-  list-style-type:square;
   margin-left:20px;
 }
 
@@ -1000,7 +1000,6 @@ body#blog .post-container {
 }
 
 .blog-content .main .content ul {
-  list-style-type:square;
   margin:0 0 20px 34px;
 }
 
@@ -1054,7 +1053,6 @@ body.docs .main-col p {
 }
 
 body.docs .main-col ul {
-  list-style-type:square;
   margin-left:32px;
 }
 
