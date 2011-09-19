@@ -1,5 +1,20 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
+from django.conf import settings
+
+from sitemap import SitemapForum, SitemapTopic
+from forms import RegistrationFormUtfUsername
+from djangobb_forum import settings as forum_settings
+
+# HACK for add default_params with RegistrationFormUtfUsername and backend to registration urlpattern
+# Must be changed after django-authopenid #50 (signup-page-does-not-work-whih-django-registration)
+# will be fixed
+from django_authopenid.urls import urlpatterns as authopenid_urlpatterns
+
+for i, rurl in enumerate(authopenid_urlpatterns):
+    if rurl.name == 'registration_register':
+        authopenid_urlpatterns[i].default_args.update({'form_class': RegistrationFormUtfUsername})
+
 from registration.views import register
 admin.autodiscover()
 
@@ -7,6 +22,8 @@ from app.models import profile_callback
 from app.forms import RegForm
 
 urlpatterns = patterns('',
+    url(r'^account/', include(authopenid_urlpatterns)),
+    url(r'^forum', include('djangobb_forum.urls', namespace='djangobb')),
     url(r'^accounts/', include('socialauth.urls')),
     url(r'^accts/', include('registration.urls')),
     url(r'^accts/register/$', register, {'form_class':RegForm, 'profile_callback':profile_callback}, name='registration_register'),
@@ -42,4 +59,15 @@ urlpatterns += patterns('bjj.poll.views',
     url(r'^poll/$', 'poll_index', name='poll_index'),
     url(r'^poll/add$', 'add_poll', name='add_poll'),
 )
+# PM Extension
+if (forum_settings.PM_SUPPORT):
+    urlpatterns += patterns('',
+        (r'^pm/', include('messages.urls')),
+   )
+
+if (settings.DEBUG):
+    urlpatterns += patterns('',
+        (r'^%s(?P<path>.*)$' % settings.MEDIA_URL.lstrip('/'),
+            'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
 

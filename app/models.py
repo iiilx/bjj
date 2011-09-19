@@ -33,7 +33,7 @@ class Tag(models.Model):
         return self.name
 
 class Post(models.Model):
-    author = models.ForeignKey(User, null=True, blank=True)
+    author = models.ForeignKey(User, null=True, blank=True, related_name='main_post')
     title = models.CharField(max_length=80)
     slug = models.SlugField(max_length=80)
     is_youtube = models.BooleanField(default=False)
