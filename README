@@ -2,4 +2,4 @@ to set up this project, create a virtual env and install everything in requireme
 
 Also install Django-SocialAuth which is in the home directory: python /home/Django-SocialAuth/setup.py install
 
-make sure there's a localsettings.py and socialaith_settings.py in your python path (preferably outside of the project directory since it'll be easier to updateproduction directory) 
+make sure there's a localsettings.py and socialauth_settings.py in the project directory 
