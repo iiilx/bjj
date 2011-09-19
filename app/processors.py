@@ -31,8 +31,10 @@ def categories(request):
         return {}
 
 def top_polls_processor(request):
-    all_polls = Poll.objects.all()
-    return {'top_polls':all_polls}
+    s = cache.get('top_polls')
+    py = cPickle.loads(s) if s else None
+    polls = Poll.objects.filter(id__in=py)
+    return {'top_polls':polls}
 
 def most_discussed_processor(request):
     posts = cache.get('top3')

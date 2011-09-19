@@ -28,9 +28,13 @@ PPP = 25
 MAX_PAGES = LIMIT/PPP
 TABLE_TEMPLATE = 'generic_table.html'
 CATS_TEMPLATE = 'cached_cats.html'
+post_ctype = ContentType.objects.get(name="post")
 
 def get_top_polls():
+    n=3
     polls = Poll.objects.all()
+    poll_count = Poll.objects.all().count()
+    n = poll_count if poll_count < n else n
     poll_list = []
     for poll in polls:
         count = 0
@@ -38,7 +42,15 @@ def get_top_polls():
             count += choice.votes
         poll_list.append((poll, count))
     poll_list.sort(key=lambda tup: tup[1], reverse=True)
-    top_polls_by_id = [tup[0].pk for tup in poll_list]
+    i = 0
+    top_polls=[]
+    while i < n:
+        top_polls.append(poll_list[i][0].pk)
+        i +=1
+    cache.set('top_polls', cPickle.dumps(top_polls))
+
+def get_comment_count(post_pk):
+    return CustomThreadedComment.objects.filter(content_type=post_ctype, object_pk=post_pk).count()
 
 def get_most_discussed():
     posts = Post.objects.all()
@@ -107,15 +119,11 @@ def update_top2():
     cache.set('top-ct', max_pages)        
 
 def update_all():
-    #update_uncat_count()
     update_top_cats2()
     update_latest2()
     get_most_discussed()
-    #get_uncat()
     update_top2() 
     get_top_polls()
-    #all_cats() 
-    #process_upvotes()
 
 if __name__ == '__main__':
     update_all() 

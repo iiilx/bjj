@@ -144,7 +144,7 @@ try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document
         <h5>Popular Polls</h5>
         <hr />
         {% for poll in top_polls %}         
-        <p>{{poll.question}}</p>
+        <p><a href="{% url get_poll_single poll.id %}">{{poll.question}}</a></p>
         {% endfor %}
     </aside>
     <aside class="sidebar">
