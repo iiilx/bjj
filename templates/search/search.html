@@ -23,7 +23,11 @@ search | {{block.super}}
 
             {% for result in page.object_list %}
                 <p>
+                    {% ifequal result.model_name 'post' %}
                     <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+                    {% else %}
+                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.question}}</a>
+                    {% endifequal %} 
                 </p>
             {% empty %}
                 <p>No results found.</p>
