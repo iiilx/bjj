@@ -5,9 +5,9 @@ def get(key, default):
     return getattr(settings, key, default)
 
 # FORUM Settings
-FORUM_BASE_TITLE = get('DJANGOBB_FORUM_BASE_TITLE', 'Buy Gold Forum')
-FORUM_META_DESCRIPTION = get('DJANGOBB_FORUM_META_DESCRIPTION', 'A forum for learning about gold, how to buy gold, the gold price, and money in general.')
-FORUM_META_KEYWORDS = get('DJANGOBB_FORUM_META_KEYWORDS', 'Buy Gold, Gold Price, How to buy gold, where to buy gold')
+FORUM_BASE_TITLE = get('DJANGOBB_FORUM_BASE_TITLE', 'BJJ Links Forum')
+FORUM_META_DESCRIPTION = get('DJANGOBB_FORUM_META_DESCRIPTION', 'A forum for MMA, BJJ, UFC.')
+FORUM_META_KEYWORDS = get('DJANGOBB_FORUM_META_KEYWORDS', 'BJJ, MMA, UFC, fighting')
 TOPIC_PAGE_SIZE = get('DJANGOBB_TOPIC_PAGE_SIZE', 10)
 FORUM_PAGE_SIZE = get('DJANGOBB_FORUM_PAGE_SIZE', 20)
 SEARCH_PAGE_SIZE = get('DJANGOBB_SEARCH_PAGE_SIZE', 20)
